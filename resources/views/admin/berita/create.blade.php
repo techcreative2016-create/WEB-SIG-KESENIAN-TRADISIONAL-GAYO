@@ -1,0 +1,59 @@
+@extends(auth()->user()->role === 'master' ? 'layouts.master' : 'layouts.admin')
+@section('title', 'Tambah Berita Terbaru')
+
+@section('content')
+<div class="mb-6 flex justify-between items-center">
+    <div>
+        <h1 class="text-headline-lg font-headline-lg font-bold text-primary">Tambah Berita</h1>
+        <p class="text-on-surface-variant">Buat berita atau artikel baru.</p>
+    </div>
+    <a href="{{ route('admin.berita.index') }}" class="flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-lg hover:bg-surface-dim transition-colors">
+        <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+        <span class="font-bold">Kembali</span>
+    </a>
+</div>
+
+<div class="glass-panel rounded-2xl border border-outline-variant/30 p-8 max-w-4xl">
+    <form action="{{ route('admin.berita.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        
+        <div class="mb-6">
+            <label for="judul" class="block text-label-md font-bold text-on-surface mb-2">Judul Berita</label>
+            <input type="text" name="judul" id="judul" class="w-full bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all @error('judul') border-error @enderror" value="{{ old('judul') }}" required placeholder="Contoh: Kemeriahan Festival Tari Guel 2024">
+            @error('judul') <span class="text-error text-label-sm mt-1 block">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-6">
+            <label for="kategori" class="block text-label-md font-bold text-on-surface mb-2">Kategori</label>
+            <select name="kategori" id="kategori" class="w-full bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all @error('kategori') border-error @enderror" required>
+                <option value="">Pilih Kategori...</option>
+                <option value="Artikel Budaya" {{ old('kategori') == 'Artikel Budaya' ? 'selected' : '' }}>Artikel Budaya</option>
+                <option value="Kriya Gayo" {{ old('kategori') == 'Kriya Gayo' ? 'selected' : '' }}>Kriya Gayo</option>
+                <option value="Sejarah" {{ old('kategori') == 'Sejarah' ? 'selected' : '' }}>Sejarah</option>
+                <option value="Event" {{ old('kategori') == 'Event' ? 'selected' : '' }}>Event / Acara</option>
+                <option value="Lainnya" {{ old('kategori') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+            </select>
+            @error('kategori') <span class="text-error text-label-sm mt-1 block">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-6">
+            <label for="thumbnail" class="block text-label-md font-bold text-on-surface mb-2">Thumbnail / Gambar Berita</label>
+            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" class="w-full bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all @error('thumbnail') border-error @enderror" required>
+            <p class="text-on-surface-variant text-label-sm mt-2">Disarankan menggunakan gambar beresolusi 16:9 (Landscape).</p>
+            @error('thumbnail') <span class="text-error text-label-sm mt-1 block">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="mb-8">
+            <label for="konten" class="block text-label-md font-bold text-on-surface mb-2">Konten Berita</label>
+            <textarea name="konten" id="konten" rows="10" class="w-full bg-surface-container border border-outline-variant/50 rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary transition-all @error('konten') border-error @enderror" required placeholder="Tulis isi berita di sini...">{{ old('konten') }}</textarea>
+            @error('konten') <span class="text-error text-label-sm mt-1 block">{{ $message }}</span> @enderror
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit" class="bg-primary text-white font-bold px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors shadow-md">
+                Simpan & Ajukan Persetujuan
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
